@@ -1,0 +1,411 @@
+D2- eDBDA:
+----------
+REMOVE:
+-------
+a) A file:
+----------
+	# rm filename
+	# rm -fv  filename
+b) A dir:
+---------
+	# rm -rfv dirname
+
+MOVE: [cut n paste ]
+-----
+# mv src dst
+rename:
+# mv oldname newname
+
+# mkdir .dirname [Hidden Content]
+# ls -a [ Show all content with hidden data]
+
+
+whoami 
+
+echo "msg" : Print the msg on terminal
+
+# history
+# !166
+# history -c [ -c : clear]
+
+alias: [ command redirection ]
+------
+check current alias:
+
+# alias
+
+Create :
+
+# alias money='whoami'
+
+Remove:
+
+# unalias money
+==================
+Variables:
+
+a=8
+
+echo "$a"
+
+
+env variable:
+-------------
+# env
+
+# echo $HISTTIMEFORMAT
+
+%d [Day]
+%m [Month]
+%y [Year]
+%T [Time]
+
+# export HISTTIMEFORMAT="%d-%m-%y %T "
+
+------
+# history
+
+# echo $HISTSIZE
+1000
+
+# export HISTSIZE=0
+
+-----------------------------
+| [pipe sign] :
+---------------
+# cmd1 | cmd2
+--o/p-->as--i/p-->
+
+
+tail [print the output from the end of file] - Default 10 lines
+
+# tail file
+# tail -n 5 file
+
+[-n : number of lines]
+
+head [Top line] Default 10 lines
+
+# head file
+# head -n 5 file
+
+wc [Word Count]
+---------------
+# wc -l 
+
+# cat /etc/passwd | wc -l
+------------------------------
+grep : To search/find the string.
+----
+# grep "string" filename
+
+# cat /etc/passwd | grep "string"
+
+-v [Inverse Grep]
+
+# cat /etc/passwd | grep -v "nologin" | grep "root"
+
+=======================================================
+
+Basic Users & group management:
+-------------------------------
+
+1) Super User
+2) Normal User
+3) Service Accounts
+
+
+=> user related information stored into: 
+
+# cat /etc/passwd
+user:x:1000:1000:COMMENT:/home/user:/bin/bash
+name | UID  GID    Home Dir  Shell
+      \_ Password required 
+
+
+UID (0-60000)		|	GID (0-60000)
+----------------------------------------------------
+0-999 [Super User]	|	0-999 [Super group]
+1000+ [Normal User]	|	1000+ [normal Group]
+-----------------------------------------------------
+
+=> user password related information stored into: 
+
+# cat /etc/shadow
+user:Encrypted Password:Acc. Age
+
+SHA512 + Salt Algo
+
+# chage -l username
+
+Groups:
+-------
+
+=> Group related information stored into: 
+
+# cat /etc/group
+
+grp:x:GID
+
+=> Group password related information stored into:
+
+# cat /etc/gshadow
+grp:encrypted pass
+
+================
+a) Create user:
+
+# useradd username
+OR
+# adduser username
+
+b) Assign/Change the password:
+
+# passwd username
+# passwd -d username
+[-d : delete]
+
+c) Remove User:
+
+- Without home dir:
+	# userdel natasha
+
+- with home dir
+	# userdel -r username
+
+d) Create a group:
+
+# groupadd groupname
+
+e) Assign/Chnage Password:
+
+# gpasswd groupname
+
+
+f) To delete a group:
+
+# groupdel groupname
+
+To switch the user:
+
+# su - username
+$ exit [Logout]
+
+# id username
+======================================
+Basic Permissions: [ File based ]
+------------------
+
+1) Symbolic Method
+===================
+read	: r
+write	: w
+execute	: x
+------------
+user owner	: u
+group owner	: g
+Others		: o
+All		: a
+------------
+Assign		: +
+Remove		: -
+Overwrite	: =
+------------
+Permission Area:
+----------------
+--- : user owner
+--- : group owner
+--- : Others
+
+# ls -l
+-rw-r--r--. 1 root root   43 Sep 23 01:56 file1
+
+Default permissions for file: 644
+-----------------------------
+read & write	: u
+read		: g
+read		: o
+
+Default permissions for dir: 755
+----------------------------
+read, write & execute	: u
+read & execute		: g
+read & execute		: o
+
+Change permissions in Symbolic menthod:
+---------------------------------------
+# chmod u+rx file/dir
+# chmod u-r,g+rw,o-rwx file/dir
+# chmod u=rw file/dir
+# chmod a=r file/dir
+
+2) Numeric Method
+-----------------
+
+read	: 4
+write	: 2
+execute	: 1
+Full	: 7
+No	: 0
+
+---	000	0
+r--	100	4	
+-w-	010	2
+--x	001	1
+rwx	111	7
+
+# chmod 711 file/dir
+# chmod 111 dir -R
+[-R : recursively]
+================================
+
+Default permissions for file: 644
+Default permissions for dir: 755
+
+Linux Kernel:
+	file: 	666 - 022 = 644
+	dir: 	777 - 022 = 755
+
+UMASK Octal Values:
+-------------------
+# umask
+0022
+
+# umask 0000
+
+file: 	666 - 000 = 666
+dir: 	777 - 000 = 777
+
+Umask Octal :
+-------------
+0	rwx
+1	rw
+2	rx
+3	r
+4	wx
+5	w
+6	x
+7	-
+=========================================
+Q. Your Linux system's umask variable is currently set to a value of 077. A user named 'jason' (who is a member of the users group) creates a dir named /tasks. What can users who are members of the users group do with this file?
+
+
+Q. You need to change the permissions of a file named schedule.txt such that the file owner can edit the file, users who are members of the group that owns the file can edit it, and users who are not owners and don't belong to the owning group can view it but not modify it. Which command will do this?
+
+Ans. 224
+
+Q. How do you print the lines between 5 and 10, both inclusive?
+
+Ans. cat file1 | head | tail -6
+
+Q. Create a new file “new.txt” that is a concatenation of “file1.txt” and “file2.txt”
+
+Ans. cat file1.txt file2.txt > new.txt
+
+Q. What is the output of the following code:
+
+os=Unix
+echo 1.$os 2."$os" 3.'$os' 4.$os
+
+Ans. 1.Unix 2.Unix 3.$os 4.Unix
+
+Q. cat < file1 >> file2 | file3
+
+Ans. Syntax error
+
+Q. Create a Command Shell Environment on machine. : 
+-Create a command 'qstat'.
+
+-It should able to execute the following command ( ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,comm )
+
+======================================
+714 - /secret.txt
+
+root [7]
+root [1]
+
+99 - Others [4]
+
+1 - Others [7]
+
+Ownership:
+----------
+a) Change user Onwer:
+-----
+# chown natasha /secret.txt
+
+b) Change group Onwer:
+-----
+# chgrp grp1 /secret.txt
+
+704 - /secret.txt
+
+natasha [7]
+grp1 [0]
+
+90 - Others [4]
+
+1 - natasha [7]
+
+9 - Others [0] ---> Add ---> grp1
+
+Membership:
+-----------
+
+a) Primary Membership
+---------------------
+- add a user as primary member of a group
+# groupadd grp1
+# useradd -g grp1 u1
+
+-g : Primary Membership
+
+b) Secondary Membership
+
+- add a user as secondary member of a group
+# groupadd grp2
+
+# useradd -G grp2 u2
+
+-G : Secondary Membership
+
+- add existing user as a secondary member of a group
+
+# usermod -G grp2 natasha
+
+
+e.g: 
+
+# useradd -G grp u1
+# useradd -G grp u2
+======================================
+
+
+
+704 - /secret.txt
+
+natasha [7]
+grp1 [0]
+
+80 - Others [4]
+
+1 - natasha [7]
+
+9 - Others [0] ---> Add ---> grp1
+
+10 - Other [2] ?????
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

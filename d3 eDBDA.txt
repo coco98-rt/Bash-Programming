@@ -1,0 +1,377 @@
+d3-eDBDA
+---------
+Agenda:
+
+- ACL [ Access Control List ]
+
+System provide the permissions to the users/groups for accessing any objects but without changing any ownership & without assigning any permission to the other.
+
+How to assign ACL:
+------
+# setfacl -m u:username:rw- file/dir
+
+# setfacl -m g:groupname:r-x file/dir
+
+-m : Modify
+
+
+# ls -l
+
+. [No ACL]
++ [ACL Applied]
+
+Check the ACL for File/Dir:
+---------------------------
+# getfacl file/dir
+
+# file: marvels
+# owner: root
+# group: root
+user::rw-
+user:kiosk:r--
+group::r--
+mask::r--
+other::r--
+
+-----------------------------------------
+- Find data in Linux:
+
+Syntax:
+-------
+# find <where_to_find> -attribute input 
+
+
+a) Name:
+--------
+# find /boot -name grub 
+
+b) Size:
+--------
+# find / -size 2k/2M/2G/<2M/>2M
+
+c) Permissions:
+---------------
+# find / -perm 777
+
+d) Inod/Index Number:
+---------------------
+# find / -inum 134896624
+
+e) Type:[File: f, Dir: d ]
+--------------------------
+# find / -name resolve.conf -type f
+
+f) User Owner:
+--------------
+# find / -user natasha
+
+
+exec: 
+-----
+# find / -user natasha -exec cp -rfv {} /data \;
+===========================================
+- Backup & Restore:
+
+Backup: [tarball] [.tar]
+
+Syntax:
+
+# tar -attributes <new_backup_file>.tar <path_of_original_data>
+
+a) Create
+
+# tar -cvf natasha_backup.tar /home/natasha 
+
+-c : Create
+-v : verbose
+-f : forcefully
+
+b) View
+
+# tar -tvf natasha_backup.tar
+
+-t : Tree view
+
+c) Extract
+
+# tar -xvf natasha_backup.tar [Extract the data in PWD]
+
+-x : Extract
+
+# tar -xvf natasha_backup.tar -C /data
+
+-C : Create
+
+
+Backup: [gunzip] [.tar.gz]
+
+a) Create:
+
+# gzip natasha_backup.tar
+
+b) Extract:
+
+# gunzip natasha_backup.tar.gz
+
+[tarball + Gunzip]:[.tgz]
+-------------------
+a) Create:
+
+# tar -czvf natasha_backup.tgz /home/natasha 
+=========================================================
+- Editor [ VIM ]
+
+# vim filename
+
+
+Command Line Mode:
+------------------
+i	: To goto the insert mode.
+Esc	: Return to command line mde.
+o	: Jump to next line & take you to insert mode.
+O	: Go to insert mode by adjusting the current line to next line.
+yy 	: To copy [yanked] the current line.
+p	: Paste
+nyy	: n = 1,2,3,4...n Copy `n` number of lines.
+dd	: Cut OR Delete the current line.
+ndd	: n = 1,2,3,4...n Cut/Delete `n` number of lines.
+
+Last line Actions:
+------------------
+:line	: take you to specific line number
+:set nu	: Set number of line.
+:set nonu: remove number of line.
+:%s/original_word/new_word : Replace word
+/word : Search word
+:w	: Write/Save
+:q	: Quit
+:wq	: Write & Quit
+:w!	: Write/Save Forcefully
+:q!	: quit Forcefully
+:wq!	: Write & Quit Forcefully
+
+
+
+VIM vs NANO
+------------------------------------------------------------------------------------
+- Media I/O mounting
+
+a) Check the mounted media:
+---------------------------
+# mount
+# df -h
+
+b) Unmount:
+-----------
+#umount /dev/sr0
+
+c) Mounting:
+------------
+#mount /dev/sr0 /mnt
+=======================================================
+- Shell files [ .bashrc, .bash_history ]..
+
+~ [Home dir of loggedIn user]
+
+
+# export HISTSIZE=10000
+
+# alias hack='echo "YOUR SYSTEM IS HACKED!!!"'
+
+# echo "Welcome Sir!!!"
+
+
+For current session:
+
+# source ~/.bashrc
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tee
+---
+[stdout & at the same that will also print the o/p on screen]
+File Descriptors
+
+> [stdout]
+
+# echo "LOL" | tee filename
+======================================================
+sort:
+-----
+
+# cat file | sort
+# cat lol | sort -u
+=============================================================
+subshell
+---------
+bash
+  \_cmd
+
+# which mkdir
+$(cmd)
+
+# vim $(which pwd)
+
+=======================================
+
+IO Streams:
+-----------
+	-stdin [File descriptor 0]
+	-stdout [File descriptor 1]
+	-stderr  [File descriptor 2]
+
+
+
+File Descriptors:
+-----------------
+Redirect the standard streams:
+
+	- '< file' connects a file to stdin
+	- '> file' redirects stdout to a file
+	- '2> file' redirects stderr to a file
+	- '&> file' redirects stdout & stderr to a file
+	- '2>&1' redirects stderr to stdout!
+
+
+
+/dev/null [nullvoid]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+grep:
+-----
+# ifconfig  | grep "inet" | grep -v "inet6\|127.0.0.1"
+
+
+Metachar [^ $]:
+~~~~~~~~
+caret [^] : Start of the line
+
+# cat /etc/group | grep "^sys"
+
+dollar [$]: End of the line
+
+# cat /etc/group | grep "hunt$"
+
+# cat file | grep "^Dheeraj$"
+
+e.g
+# cat urls.txt | grep "\.do$"
+
+
+
+egrep: [Extended GREP]
+------
+
+cmd | egrep ""
+cmd | grep -E ""
+
+# cat file | egrep "string1|string2"
+
+# cat urls.txt | egrep "\.zip[0-9]+"
+
+# cat urls.txt | egrep "\.zip[0-9a-zA-Z]+"
+
+# cat urls.txt | egrep "\.zip[0-9a-zA-Z]+$"
+
+predefined class characters:
+----------------------------
+[[:alpha:]]	Alphabetic char
+[[:digit:]]	Digits
+[[:lower:]]	Lowercase char
+[[:upper:]]	Upeercase Char
+[[:blank:]]	Tab & Space
+[[:alnum:]]	Alphanumeric char
+
+#  cat file | egrep "[[:digit:]]"
+
+=======================================================
+
+awk & cut
+----------
+# ifconfig  | grep "inet" | grep -v "inet6\|127.0.0.1" | awk '{print $2}'
+
+# ifconfig  | grep "inet" | grep -v "inet6\|127.0.0.1" | awk '{print $2 " --- " $4}'
+
+# cat /etc/passwd | awk -F":" '{print $1}'
+
+# cat /etc/passwd | awk -F":" '{print $NF}'
+
+Cut:
+# cat /etc/passwd | cut -d":" -f3
+# cat /etc/passwd | cut -d":" -f1,3
+# cat /etc/passwd | cut -d":" -f1-3
+# cat /etc/passwd | cut -d":" -f3-
+
+
+$
+%
+&
+;
+.
+/
+==========================================
+
+exit code:
+----------
+
+0 	= SUCCESS
+1+	= FAILED
+
+# echo $?
+----------------
+Positional parameters
+---------------------
+
+# set One Two Three
+
+# echo $1
+# echo $2
+# echo $3
+
+# echo $#
+
+========================================
+Get start with simple scripts:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# cat > file
+
+cmd1
+cmd2
+cmd3
+
+# exe file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

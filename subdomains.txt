@@ -1,0 +1,12 @@
+admin
+blog 
+cms
+test
+student
+user
+m
+account
+host
+mail
+stage
+qa

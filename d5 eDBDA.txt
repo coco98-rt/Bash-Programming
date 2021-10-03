@@ -1,0 +1,379 @@
+
+grep -iE '^([a-zA-Z0-9](([a-zA-Z0-9-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$' &> /dev/null 2>&1
+
+
+
+ls pic?.jpg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+File Type:
+----------
+1) Regular File		[-]
+2) Dir			[d]
+3) block		[b] /dev/sda1
+4) char			[c] /dev/pts/3
+5) pipe OR socket	[p OR s]
+6) Link			[l]
+
+
+
+
+
+
+
+
+# tty [ check the console/shell identity ]
+
+
+
+
+
+
+
+test command:
+----------------
+test usage:
+
+-e [True if file exists]
+-f [True if FILE exists and is a regular file]
+-r [True if FILE exists and read permission is granted] 
+-w [True if FILE exists and write permission is granted]
+-x [True if FILE exists and execute permission is granted]
+-d [True if FILE exists and is a directory]
+-s [True if FILE exists and has a size greater than zero]
+
+...
+
+eg:
+
+#test -e Desktop
+#echo #?
+0
+
+-----------
+type:
+-----
+check the binary 
+
+# type -P host
+------------------
+
+# bash subtool.sh -h	[ Help ]
+
+-d domain.tld	[Required]
+-f file.txt	[Required]
+-h help
+
+Variables:
+----------
+domain
+file
+
+
+Functions:
+----------
+banner()
+help()
+check()
+brute()
+main()
+
+
+
+CODE:
+~~~~~
+#!/bin/bash
+
+banner(){
+        printf ' ____  _   _ ____ _____ ___   ___  _\n'
+        printf '/ ___|| | | | __ )_   _/ _ \ / _ \| |\n'
+        printf '\___ \| | | |  _ \ | || | | | | | | |\n'
+        printf ' ___) | |_| | |_) || || |_| | |_| | |___\n'
+        printf '|____/ \___/|____/ |_| \___/ \___/|_____|\n'
+}
+help(){
+        echo "------------"
+        echo "SUBTOOL Help"
+        echo "------------"
+        echo "-d DOMAIN.TLD"
+        echo "-f FILE.TXT"
+        echo "-h Help"
+}
+check(){
+        type -P host &> /dev/null
+        if [[ ! $? -eq 0 ]]; then
+                echo "[!] Host command not fount. Install it."
+                exit 1
+        fi
+}
+brute(){
+        while read -r sub; do
+        if host "$sub.$domain" &> /dev/null; then
+                echo "$sub.$domain"
+        fi
+        done < $file
+}
+main(){
+if [ -f "$file" ]; then
+        check
+        brute
+else
+        echo "File $file not found"
+        exit 1
+fi
+}
+
+while [ -n "$1" ]; do
+        case "$1" in
+                '-d')
+                        domain=$2
+                        shift
+                        ;;
+
+                '-f')
+                        file=$2
+                        shift
+                        ;;
+                '-h')
+                        help
+                        exit 0
+                        ;;
+                *)
+                        printf "\t[-] Unknown Option: $1 \n"
+                        printf "\tUse: bash subtool.sh -h \n"
+                        exit 1
+                        ;;
+        esac
+        shift
+done
+banner
+main
+
+# bash subtool.sh -d google.com -f file.txt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#!/bin/bash
+#set -x
+banner(){
+        printf ' ____  _   _ ____ _____ ___   ___  _\n'
+        printf '/ ___|| | | | __ )_   _/ _ \ / _ \| |\n'
+        printf '\___ \| | | |  _ \ | || | | | | | | |\n'
+        printf ' ___) | |_| | |_) || || |_| | |_| | |___\n'
+        printf '|____/ \___/|____/ |_| \___/ \___/|_____|\n'
+}
+help(){
+        echo "------------"
+        echo "SUBTOOL Help"
+        echo "------------"
+        echo "-d DOMAIN.TLD"
+        echo "-f FILE.TXT"
+        echo "-h Help"
+}
+check(){
+        type -P host &> /dev/null
+        if [[ ! $? -eq 0 ]]; then
+                echo "[!] Host command not fount. Install it."
+                exit 1
+        fi
+}
+brute(){
+        while read -r sub; do
+        if host "$sub.$domain" &> /dev/null; then
+                echo "$sub.$domain"
+        fi
+        done < $file
+}
+main(){
+if [ -f "$file" ]; then
+        check
+        brute
+else
+        echo "File $file not found"
+        exit 1
+fi
+}
+domain_check(){
+        echo $domain | grep -iE '^([a-zA-Z0-9](([a-zA-Z0-9-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$' &> /dev/null 2>&1
+        if [[ ! $? -eq 0 ]]; then
+                printf "[-] Domain $domain is not valid!\n"
+                exit 1
+        fi
+
+}
+attrib(){
+        while :; do
+                case $1 in
+                        '-d')
+                                domain=$2
+                                shift
+                                ;;
+                        '-f')
+                                file=$2
+                                shift
+                                ;;
+                        '-h')
+                                help
+                                exit 0
+                                ;;
+                        "")
+                                shift
+                                break
+                                ;;
+                        '*')
+                                printf "\tError: Unknown Option: $1 \n"
+                                printf "\tUsage: bash subtool.sh -h \n"
+                                exit 1
+                                ;;
+                esac
+                shift
+        done
+
+if [[ ! -z "$domain" ]]; then
+        domain_check
+else
+        printf "No DOMAIN givin.\n"
+        printf "\tUsage: bash subtool.sh -h \n"
+        exit 1
+fi
+}
+banner
+attrib $@
+main
+=====================
+Ubuntu:
+-------
+# apt install package_name
+
+
+# apt install lolcat figlet -y
+
+
+
+RedHat/CentOS
+--------------
+# yum install lolcat figlet -y
+
+OR
+
+# dnf install lolcat figlet -y
+------
+Change the interective shell for user:
+
+New user
+
+#useradd -s /bin/bash username
+
+Existing user
+
+# usermod -s /bin/nologin natasha
+-------------
+Processes in Linux:
+~~~~~~~~~~~~~~~~~~~
+process manager: 
+# top
+
+press 'q' to exit
+
+
+# sleep 10 &
+
+# ps 		[ PID - Process ID]
+# ps -l 	[ Show the PPID - Parent PID ]
+# ps -e		[ All the processes ]
+
+Kill:
+-----
+# kill PID
+OR
+# kill -9 PID
+
+-9 : Forcefully
+
+# pkill sleep
+
+# killall sleep
+--------------------
+
+# sleep 10000 &
+# sleep 20000 &
+
+Check backgroup process:
+
+# jobs
+[1]-  Running                 sleep 10000 &
+[2]+  Running                 sleep 20000 &
+
+-  :  Second last added in jobs
++  : last added in jobs
+
+# jobs -l	[ with PID ]
+[1]-   971 Running                 sleep 10000 &
+[2]+   972 Running                 sleep 20000 &
+
+
+# fg %2
+
+ctrl+z [stop]
+
+# bg %2 [ To start in BG ]
+-----------------------------------------------------
+
+Multithreading:
+---------------
+
+# time cat domain.txt | while read -r line; do host -t mx $line;done
+
+real    0m1.692s
+user    0m0.141s
+sys     0m0.750s
+
+# time cat domain.txt | xargs -P500 -I X bash -c "host -t mx 'X'"
+
+real    0m0.576s
+user    0m0.219s
+sys     0m1.391s
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

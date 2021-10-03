@@ -1,0 +1,280 @@
+d4 eDBDA:
+---------
+Shell Scripting:
+----------------
+
+.sh || .bash 
+
+# vim runme.sh
+
+#!/bin/bash	[env declaration]
+cmd1
+cmd2
+cmd3
+
+:wq
+
+# chmod u+x runme.sh
+# ./runme.sh
+
+OR
+
+# bash runme.sh
+
+
+==> Debug:
+----------
+
+# bash -x runme.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Variable:
+---------
+#!/bin/bash
+target=example.com
+
+echo "My target for today is: $target"
+-----------
+#!/bin/bash
+read -p "Enter the target: " target
+echo "My target for today is: $target"
+-----------
+#!/bin/bash
+target=$(whoami)
+echo "My user for today is: $target"
+-----------
+Arithmetic
+~~~~~~~~~~~
+x=10
+y=2
+echo $(($x + $y))
+--------
+read -p "Enter first: " x
+read -p "Enter second: " y
+echo $(($x + $y))
+--------
+#!/bin/bash
+expr 2 + 2
+expr 2 - 2
+expr 2 / 2
+expr 2 \* 2
+===============================
+Conditions:
+-----------
+
+1) if...then...fi
+~~~~~~~~~~~~~~~~~
+#!/bin/bash
+read -p "Enter value: " a
+if [ $a == "1" ]
+then
+echo "Ulalala"
+fi
+
+2) if...then...else...fi
+~~~~~~~~~~~~~~~~~~~~~~~~
+#!/bin/bash
+read -p "Enter value: " a
+if [ $a == "1" ]
+then
+echo "Ulalala"
+else
+echo "WTF"
+fi
+
+3) if...then...elif...then...fi
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#!/bin/bash
+read -p "Enter value: " a
+if [ $a == "1" ]
+then
+echo "Ulalala"
+elif [ $a == "2" ]
+then
+echo "Ch mayla kutriya saala"
+fi
+
+4) if...then...elif...then...else...fi
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#!/bin/bash
+read -p "Enter value: " a
+if [ $a == "1" ]
+then
+echo "Ulalala"
+elif [ $a == "2" ]
+then
+echo "Ch mayla kutriya saala"
+else
+echo "Hard Rock"
+fi
+
+example:
+
++-------------------------------+
+| LOCAL LINUX ENUMERATION       |
++-------------------------------+
+1. MANUAL
+2. AUTO
+3. EXIT
+
+Input> 1
+
+[+] Hostname: output			hostname
+
+Input> 2
+
+[+] All Users: output
+[+] Current User: output
+
+Input> 3
+
+exit
+
+Input> hdkfjuh9734fewrj
+[!] Error
+-----------------------------------------------------------
+while loop:
+-----------
+
+
+while true
+do
+echo "LOL"
+done
+
+# while true;do echo "LOL";done
+
+redirect/stdin 
+--------
+# cat > file
+Dheeraj
+Tabish
+Amruta
+Mayur
+
+# while read -r name; do echo "Name: $name";done < file
+
+# cat file | while read -r name; do echo "Name: $name";done
+----------------------------
+
+TOOL:
+-----
+
+example.com		DOMAIN
+admin.example.com	SUB DOMAIIN
+
+DNS
+
+name - IP
+IP - name
+------
+
+
+Target : yahoo.com
+
+
+# vim subtool.sh
+#!/bin/bash
+target=$1
+file=$2
+while read -r sub; do
+        if host "$sub.$target" &> /dev/null; then
+                echo "$sub.$target"
+        fi
+done < $file
+
+# bash subtool.sh cdac-392849387*^&&*%^&%#@&^32,32327.in subdomains.txt
+
+echo -e "LOL\nMOO"
+--------------------------------------------
+
+nasted if:
+----------
+
+#!/bin/bash
+file=$1
+
+if [ -f "$file" ]; then
+	if [ -w "$file" ]; then
+		echo "Enter text:"
+		cat >> $file
+	else
+		echo "Not writable"
+	fi
+else
+	echo "$file not found"
+fi
+=======================
+Assignment:=
+
+A domain name consists of minimum two and maximum 63 characters.
+All letters from a to z, all numbers from 0 to 9 and a hyphen (-) are possible.
+A domain name mustn't consist of a hyphen (-) on the third and fourth position at the same time.
+
+egrep
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Functions:
+----------
+
+
+#!/bin/bash
+target=$1
+file=$2
+
+brute(){
+	while read -r sub; do
+        if host "$sub.$target" &> /dev/null; then
+                echo "$sub.$target"
+        fi
+	done < $file
+}
+
+if [ -f "$file" ]; then
+	brute
+else
+	echo "$file not found"
+fi
+----------------------------------------------------------
+Color code in bash:
+-------------------
+
+yellow='\e[33m'
+end='\e[0m'
+
+echo -e "${yellow}jingalala${end} hoo"
+
+----------------------------------------------------------
+CASE in BASH
+------------
+
+#!/bin/bash
+f1(){
+        echo "F1 is cool"
+}
+f2(){
+        echo "F2 is awesome"
+}
+menu(){
+        echo -e "1. Func 1\n2. Fun 2\n3. exit"
+        read -p "Input> " a
+}
+menu
+case $a in
+        "1")
+                f1
+                ;;
+        "2")
+                f2
+                ;;
+        "3")
+                exit
+                ;;
+        *)
+                echo "WTF"
+                ;;
+esac
+
+
+
+
